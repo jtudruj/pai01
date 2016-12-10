@@ -8,6 +8,10 @@
         <servlet-name>TestInitServlet</servlet-name>
         <servlet-class>TestInitServlet.TestInitServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CalculatorServlet</servlet-name>
+        <servlet-class>CalculatorServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HelloServlet</servlet-name>
         <url-pattern>/HelloServlet</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>TestInitServlet</servlet-name>
         <url-pattern>/TestInitServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CalculatorServlet</servlet-name>
+        <url-pattern>/CalculatorServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
