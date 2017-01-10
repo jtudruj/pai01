@@ -59,31 +59,36 @@ public class CalculatorServlet extends HttpServlet {
             if (this.isClearSessionRequest(request)) {
                 if (this.session != null) {
                     this.session.removeAttribute("lastOperations");
+                    this.lastOperation = null;
                     out.println("<p>Sesja wyczyszczona! <a href=\"http://localhost:8080/Hello/Calculator.html\">Wroc do kalkulatora</a></p>");
+                    return;
                 }
             }
             
-            String result = "<p>" + this.calculationResult(request) + "</p>";
-            if (this.isFormValid(request)) {
-                out.println("<h1>Wynik operacji</h1>");
-                
-                out.println(result); 
-            } else {
+            
+            if (!this.isFormValid(request)) {
                 out.println("<p>Invalid intput!!!</p>");
+                out.println("<p><a href=\"http://localhost:8080/Hello/Calculator.html\">Zacznij od nowa</a></p>");
+
+                return;
             }
-            out.println("<h1>Historia operacji</h1>");
+            
+            out.println("<h1>Wynik operacji</h1>");
+            String result = "<p>" + this.calculationResult(request) + "</p>";
+            out.println(result); 
                 
-            this.lastOperation = result + (String)this.session.getAttribute("lastOperations");
-            if (lastOperation == null) {
+                
+            if (lastOperation == null || lastOperation.equals("null") || lastOperation.equals("")) {
                 out.println("<p>Brak historii</p>");
+                lastOperation = "";
             } else {
-                out.println(lastOperation);                
+                out.println("<h1>Historia operacji</h1>");  
+                lastOperation = this.lastOperation.replaceAll("null", "");
+                out.println(lastOperation); 
             }
-            if (this.isFormValid(request)) {
-                lastOperation += result; 
-                this.session.setAttribute("lastOperations", lastOperation);
-            }
-                
+            this.lastOperation = result + (String)this.session.getAttribute("lastOperations");
+            this.session.setAttribute("lastOperations", this.lastOperation);
+            
             out.println("<p><a href=\"http://localhost:8080/Hello/Calculator.html\">Nowa operacja</a></p>");
             out.println(
                 "<form action=\"CalculatorServlet\" method=\"post\">\n" +
@@ -91,7 +96,6 @@ public class CalculatorServlet extends HttpServlet {
                 "</form>"
             );
             
-            //out.println("<h1>Servlet CalculatorServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
